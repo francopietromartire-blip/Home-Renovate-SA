@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeCraft - Project & Workshop Management</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="h-full font-sans antialiased text-slate-800" x-data="homeCraftApp()">
+
+    <div class="min-h-full flex flex-col">
+        <!-- Top Navigation -->
+        <header class="bg-indigo-700 shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white p-2 rounded-lg text-indigo-700 font-bold text-xl shadow">
+                        <i class="fa-solid fa-house-chimney"></i>
+                    </div>
+                    <span class="text-white text-xl font-extrabold tracking-wide">HomeCraft</span>
+                </div>
+                <div class="text-indigo-200 text-sm font-medium">
+                    <i class="fa-regular fa-calendar-days mr-1"></i> <span x-text="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- Tab Navigation -->
+            <div class="flex space-x-2 border-b border-slate-200 pb-4 mb-6 overflow-x-auto">
+                <button @click="activeTab = 'dashboard'" :class="activeTab === 'dashboard' ? 'bg-indigo-600 text-white shadow' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+                </button>
+                <button @click="activeTab = 'projects'" :class="activeTab === 'projects' ? 'bg-indigo-600 text-white shadow' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-hammer"></i><span>Projects</span>
+                </button>
+                <button @click="activeTab = 'materials'" :class="activeTab === 'materials' ? 'bg-indigo-600 text-white shadow' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-boxes-stacked"></i><span>Materials Inventory</span>
+                </button>
+                <button @click="activeTab = 'budget'" :class="activeTab === 'budget' ? 'bg-indigo-600 text-white shadow' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-4 py-2 rounded-lg font-medium text-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-wallet"></i><span>Budget Estimator</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: DASHBOARD -->
+            <div x-show="activeTab === 'dashboard'" class="space-y-6">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Active Projects</p>
+                            <h3 class="text-3xl font-bold text-slate-900 mt-1" x-text="projects.length"></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-helmet-safety"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Materials Tracked</p>
+                            <h3 class="text-3xl font-bold text-slate-900 mt-1" x-text="materials.length"></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total Budget Allocated</p>
+                            <h3 class="text-3xl font-bold text-slate-900 mt-1" x-text="'R ' + totalBudget.toLocaleString()"></h3>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Projects Overview -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">Recent Project Status</h3>
+                    <div class="space-y-4">
+                        <template x-for="project in projects" :key="project.id">
+                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h4 class="font-semibold text-slate-800" x-text="project.name"></h4>
+                                    <p class="text-sm text-slate-500" x-text="project.description"></p>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full"
+                                        :class="{
+                                            'bg-amber-100 text-amber-800': project.status === 'In Progress',
+                                            'bg-emerald-100 text-emerald-800': project.status === 'Completed',
+                                            'bg-slate-200 text-slate-700': project.status === 'Planning'
+                                        }" x-text="project.status"></span>
+                                    <div class="w-32 bg-slate-200 rounded-full h-2.5">
+                                        <div class="bg-indigo-600 h-2.5 rounded-full" :style="`width: ${project.progress}%`"></div>
+                                    </div>
+                                    <span class="text-xs font-medium text-slate-600" x-text="project.progress + '%'"></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: PROJECTS -->
+            <div x-show="activeTab === 'projects'" class="space-y-6">
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-900">Manage Projects</h3>
+                    <button @click="showAddProjectModal = true" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm">
+                        <i class="fa-solid fa-plus mr-1"></i> New Project
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <template x-for="project in projects" :key="project.id">
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="text-lg font-bold text-slate-900" x-text="project.name"></h4>
+                                    <button @click="deleteProject(project.id)" class="text-slate-400 hover:text-red-500 text-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-slate-600 text-sm mb-4" x-text="project.description"></p>
+                            </div>
+                            <div class="space-y-3 pt-4 border-t border-slate-100">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Progress</span>
+                                    <span class="font-medium text-slate-700" x-text="project.progress + '%'"></span>
+                                </div>
+                                <input type="range" min="0" max="100" x-model.number="project.progress" class="w-full accent-indigo-600">
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- TAB 3: MATERIALS INVENTORY -->
+            <div x-show="activeTab === 'materials'" class="space-y-6">
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-
+
