@@ -2027,5 +2027,65 @@
             }, 3400);
         }
     </script>
+    <div id="proRegistrationModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <button type="button" id="closeProRegistration" aria-label="Close">×</button>
+
+    <h2>Register as a SA Pro</h2>
+
+    <form id="proRegistrationForm">
+      <label>Business name
+        <input type="text" name="businessName" required>
+      </label>
+
+      <label>Contact person
+        <input type="text" name="contactPerson" required>
+      </label>
+
+      <label>Email
+        <input type="email" name="email" required>
+      </label>
+
+      <label>Phone / WhatsApp
+        <input type="tel" name="phone" required>
+      </label>
+
+      <label>Trade or service
+        <select name="service" required>
+          <option value="">Select a service</option>
+          <option>Builder / General contractor</option>
+          <option>Plumber</option>
+          <option>Electrician</option>
+          <option>Roofer</option>
+          <option>Painter</option>
+          <option>Architect</option>
+          <option>Interior designer</option>
+          <option>Other</option>
+        </select>
+      </label>
+
+      <label>Province
+        <input type="text" name="province" required>
+      </label>
+
+      <label>Areas served
+        <input type="text" name="areas" placeholder="Cities or suburbs" required>
+      </label>
+
+      <label>Experience
+        <textarea name="experience" rows="4"
+          placeholder="Describe your experience and qualifications"
+          required></textarea>
+      </label>
+
+      <label>
+        <input type="checkbox" name="consent" required>
+        I consent to my details being used to process this registration.
+      </label>
+
+      <button type="submit">Submit registration</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>
