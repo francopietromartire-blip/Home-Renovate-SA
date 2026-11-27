@@ -2087,5 +2087,47 @@
     </form>
   </div>
 </div>
+    const registerProBtn = document.getElementById("registerProBtn");
+const proRegistrationModal =
+  document.getElementById("proRegistrationModal");
+const closeProRegistration =
+  document.getElementById("closeProRegistration");
+const proRegistrationForm =
+  document.getElementById("proRegistrationForm");
+
+// Open the form
+registerProBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  proRegistrationModal.style.display = "flex";
+});
+
+// Close the form
+closeProRegistration.addEventListener("click", () => {
+  proRegistrationModal.style.display = "none";
+});
+
+// Close when clicking outside the modal
+proRegistrationModal.addEventListener("click", (event) => {
+  if (event.target === proRegistrationModal) {
+    proRegistrationModal.style.display = "none";
+  }
+});
+
+// Handle submission
+proRegistrationForm.addEventListener("submit", (event) => {
+  event.preventEvent();
+
+  const data = new FormData(proRegistrationForm);
+  const registration = Object.fromEntries(data.entries());
+
+  console.log("Contractor registration:", registration);
+
+  alert(
+    "Thank you. Your registration has been submitted for verification."
+  );
+
+  proRegistrationForm.reset();
+  proRegistrationModal.style.display = "none";
+});
 </body>
 </html>
